@@ -1,0 +1,21 @@
+{
+    "name": "gornymedia/laravel-shortcodes",
+    "description": "Laravel shortcodes package",
+    "license": "MIT",
+    "keywords": ["laravel", "shortcodes"],
+    "authors": [
+        {
+            "name": "Tom Gorny",
+            "email": "tom@gornymedia.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gornymedia\\Shortcodes\\": "src/Shortcodes/"
+        }
+    },
+    "minimum-stability": "dev"
+}
