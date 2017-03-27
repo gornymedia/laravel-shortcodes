@@ -21,7 +21,7 @@ class ShortcodesServiceProvider extends ServiceProvider {
      * Register the Shortcode
      */
     public function registerShortcode() {
-        $this->app->bindShared('shortcode', function($app) {
+        $this->app->singleton('shortcode', function($app) {
             return new Shortcode();
         });
     }
@@ -30,7 +30,7 @@ class ShortcodesServiceProvider extends ServiceProvider {
      * Register the View
      */
     public function registerView() {
-        $this->app->bindShared('view', function($app) {
+        $this->app->singleton('view', function($app) {
             $resolver = $app['view.engine.resolver'];
             $finder = $app['view.finder'];
             $env = new Factory($resolver, $finder, $app['events'], $app['shortcode']);
