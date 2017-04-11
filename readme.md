@@ -51,12 +51,27 @@ Shortcode::add('example', function($atts, $content, $name)
   $a = Shortcode::atts(array(
     'foo' => 'something',
     'bar' => 'something else',
-    ), 
+    ),
     $atts
   );
     return "foo = {$a['foo']}";
 });
 ```
+Include Partial files in Shortcode
+
+```php
+
+Shortcode::add('widget', function($atts, $content, $name) {
+    $file = 'partials/' . $atts['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
+      if ( view()->exists($file) ) {
+          return view($file);
+      }
+});
+
+Usage : [widget name="maps"]
+
+```
+
 
 ## View rendering
 
