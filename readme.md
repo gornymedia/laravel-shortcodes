@@ -57,21 +57,41 @@ Shortcode::add('example', function($atts, $content, $name)
     return "foo = {$a['foo']}";
 });
 ```
-Include Partial files in Shortcode
+Include partial files in shortcode
 
 ```php
 
-Shortcode::add('widget', function($atts, $content, $name) {
-    $file = 'partials/' . $atts['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
-      if ( view()->exists($file) ) {
-          return view($file);
-      }
+Shortcode::add('widget', function($atts, $content, $name) 
+{
+ $a = Shortcode::atts(array(
+  'name' => $name,
+  'foo' => 'something'
+  ), $atts);
+  
+ $file = 'partials/' . $a['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
+ 
+ if ( view()->exists($file) ) {
+  return view($file, a);
+ }
 });
 
 Usage : [widget name="maps"]
 
 ```
 
+Compile shortcodes inside shortcode content
+
+```php
+
+Shortcode::add('strong', function($atts, $content, $name) {
+ $content = Shortcode::compile($content);
+ 
+ return "<strong>$content</strong>";
+});
+
+Usage: [strong][example][/strong]
+
+```
 
 ## View rendering
 
