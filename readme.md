@@ -71,7 +71,7 @@ Shortcode::add('widget', function($atts, $content, $name)
  $file = 'partials/' . $a['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
  
  if ( view()->exists($file) ) {
-  return view($file, a);
+  return view($file, $a);
  }
 });
 
