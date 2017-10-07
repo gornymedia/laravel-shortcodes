@@ -7,6 +7,7 @@ Laravel Shortcodes Package
 
  Laravel  | Shortcodes
 :---------|:----------
+ 5.5.x    | 1.2.x
  5.4.x    | 1.1.x
  5.3.x    | 1.1.x
  5.2.x    | 1.1.x
@@ -18,16 +19,16 @@ Laravel Shortcodes Package
 Require this package in your `composer.json` and update composer.
 
 ```
-"gornymedia/laravel-shortcodes": "1.1.*"
+"gornymedia/laravel-shortcodes": "^1.2",
 ```
 
-Add the service provider to `app/config/app.php`
+Add the service provider to `config/app.php`
 
 ```php
 Gornymedia\Shortcodes\ShortcodesServiceProvider::class,
 ```
 
-Add the class alias to `app/config/app.php`
+Add the class alias to `config/app.php`
 
 ```php
 'Shortcode' => 'Gornymedia\Shortcodes\Facades\Shortcode',

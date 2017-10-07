@@ -2,28 +2,29 @@
 
 namespace Gornymedia\Shortcodes\Illuminate\View;
 
-use Illuminate\Events\Dispatcher,
-    Illuminate\View\ViewFinderInterface,
-    Illuminate\View\Engines\EngineResolver,
-    Illuminate\View\Factory as IlluminateViewFactory;
+use Illuminate\Events\Dispatcher;
+use Illuminate\View\ViewFinderInterface;
+use Illuminate\View\Engines\EngineResolver;
+use Illuminate\View\Factory as IlluminateViewFactory;
 use Gornymedia\Shortcodes\Shortcode;
 
 class Factory extends IlluminateViewFactory {
 
     /**
-     * @var \Gornymedia\Shortcodes\Shortcode
+     * @var Shortcode
      */
     public $shortcode;
 
     /**
-     * Create a new view factory instance.
+     * Factory constructor.
      *
-     * @param  \Illuminate\View\Compilers\EngineResolver  $engines
-     * @param  \Illuminate\View\ViewFinderInterface  $finder
-     * @param  \Illuminate\Events\Dispatcher  $events
-     * @return void
+     * @param EngineResolver $engines
+     * @param ViewFinderInterface $finder
+     * @param Dispatcher $events
+     * @param Shortcode $shortcode
      */
-    public function __construct(EngineResolver $engines, ViewFinderInterface $finder, Dispatcher $events, Shortcode $shortcode) {
+    public function __construct(EngineResolver $engines, ViewFinderInterface $finder, Dispatcher $events, Shortcode $shortcode)
+    {
         parent::__construct($engines, $finder, $events);
         $this->shortcode = $shortcode;
     }
@@ -31,14 +32,16 @@ class Factory extends IlluminateViewFactory {
     /**
      * Get the evaluated view contents for the given view.
      *
-     * @param  string  $view
-     * @param  array   $data
-     * @param  array   $mergeData
-     * @return \Illuminate\View\View
+     * @param string $view
+     * @param array $data
+     * @param array $mergeData
+     * @return View|string
      */
-    public function make($view, $data = array(), $mergeData = array()) {
-        if (isset($this->aliases[$view]))
+    public function make($view, $data = array(), $mergeData = array())
+    {
+        if (isset($this->aliases[$view])) {
             $view = $this->aliases[$view];
+        }
 
         $view = $this->normalizeName($view);
         $path = $this->finder->find($view);

@@ -4,80 +4,93 @@ namespace Gornymedia\Shortcodes;
 
 class Shortcode {
 
-    const modeCompile = 1;
-    const modeStrip = 2;
+    const modeCompile   = 1;
+    const modeStrip     = 2;
 
     /**
      * Shortcodes render mode.
+     *
+     * @var int
      */
     public $mode;
 
     /**
      * Container for storing shortcode tags.
+     *
+     * @var array
      */
-    protected $tags = array();
+    protected $tags     = array();
 
     /**
      * Add shortcode tag and their callaback.
-     * 
-     * @param string $tag Shortcode tag to be searched in content.
-     * @param callable $callback to run when shortcode is found.
-     * @return boolean
+     *
+     * @param $tag
+     * @param $callback
+     * @return bool
      */
-    public function add($tag, $callback) {
+    public function add($tag, $callback)
+    {
         if (!$this->exists($tag)) {
             $this->tags[$tag] = $callback;
             return true;
         }
+
         return false;
     }
 
     /**
      * Get count of all shortcode tags.
      *
-     * @return integer
+     * @return int
      */
-    public function count() {
+    public function count()
+    {
         return count($this->tags);
     }
 
     /**
      * Whether a registered shortcode tag exists.
      *
-     * @global array $shortcode_tags
-     * @param string $tag
-     * @return boolean
+     * @param $tag
+     * @return bool
      */
-    protected function exists($tag) {
+    protected function exists($tag)
+    {
         return array_key_exists($tag, $this->tags);
     }
 
     /**
      * Search content for shortcode tags.
      *
-     * @param string $content
-     * @return void
+     * @param $content
+     * @return mixed
      */
-    public function compile($content) {
+    public function compile($content)
+    {
         if (!$this->count()) {
             return $content;
         }
+
         $pattern = $this->getRegex();
+
         return preg_replace_callback("/$pattern/s", array($this, 'render'), $content);
     }
 
     /**
      * Regular Expression callable for compile.
      *
-     * @param array $m Regular expression match array
-     * @return mixed False on failure.
+     * @param $m
+     * @return bool|string
      */
-    protected function render($m) {
+    protected function render($m)
+    {
         if ($m[1] == '[' && $m[6] == ']') {
             return substr($m[0], 1, -1);
         }
+
         $tag = $m[2];
         $attr = $this->parseAtts(html_entity_decode($m[3], ENT_QUOTES));
+
         if (isset($m[5])) {
             return $m[1] . call_user_func($this->tags[$tag], $attr, $m[5], $tag) . $m[6];
         } else {
@@ -87,14 +100,14 @@ class Shortcode {
 
     /**
      * Retrieve the shortcode regular expression for searching.
-     * 
+     *
      * @author Wordpress
-     * 
-     * @return string The shortcode search regular expression
+     * @return string
      */
-    protected function getRegex() {
-        $tagnames = array_keys($this->tags);
-        $tagregexp = join('|', array_map('preg_quote', $tagnames));
+    protected function getRegex()
+    {
+        $tagnames   = array_keys($this->tags);
+        $tagregexp  = join('|', array_map('preg_quote', $tagnames));
         return
                 '\\['                       // Opening bracket
                 . '(\\[?)'                  // 1: Optional second opening bracket for escaping shortcodes: [[tag]]
@@ -130,13 +143,15 @@ class Shortcode {
      * Retrieve all attributes from the shortcodes tag.
      *
      * @author Wordpress
-     * 
-     * @return array List of attributes and their value.
+     * @param $text
+     * @return array|string
      */
-    protected function parseAtts($text) {
-        $atts = array();
-        $pattern = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
-        $text = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
+    protected function parseAtts($text)
+    {
+        $atts       = array();
+        $pattern    = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
+        $text       = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
+
         if (preg_match_all($pattern, $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 if (!empty($m[1]))
@@ -153,19 +168,22 @@ class Shortcode {
         } else {
             $atts = ltrim($text);
         }
+
         return $atts;
     }
 
     /**
      * Combine user attributes with known attributes and fill in defaults when needed.
-     * 
-     * @param array $pairs Entire list of supported attributes and their defaults.
-     * @param array $atts User defined attributes in shortcode tag.
-     * @return array Combined and filtered attribute list.
+     *
+     * @param $pairs
+     * @param $atts
+     * @return array
      */
-    public static function atts($pairs, $atts) {
-        $atts = (array) $atts;
-        $out = array();
+    public static function atts($pairs, $atts)
+    {
+        $atts   = (array) $atts;
+        $out    = array();
+
         foreach ($pairs as $name => $default) {
             if (array_key_exists($name, $atts)) {
                 $out[$name] = $atts[$name];
@@ -173,33 +191,39 @@ class Shortcode {
                 $out[$name] = $default;
             }
         }
+
         return $out;
     }
 
     /**
      * Remove all shortcode tags from the given content.
-     * 
-     * @param string $content Content to remove shortcode tags.
-     * @return string Content without shortcode tags.
+     *
+     * @param $content
+     * @return mixed
      */
-    public function strip($content) {
+    public function strip($content)
+    {
         if (!$this->count()) {
             return $content;
         }
+
         $pattern = $this->getRegex();
+
         return preg_replace_callback("/$pattern/s", array($this, 'stripTag'), $content);
     }
 
     /**
      * Remove shortcode tag
-     * 
-     * @param type $m
-     * @return string Content without shortcode tag.
+     *
+     * @param $m
+     * @return bool|string
      */
-    protected function stripTag($m) {
+    protected function stripTag($m)
+    {
         if ($m[1] == '[' && $m[6] == ']') {
             return substr($m[0], 1, -1);
         }
+
         return $m[1] . $m[6];
     }
 

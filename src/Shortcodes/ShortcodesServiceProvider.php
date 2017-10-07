@@ -9,10 +9,9 @@ class ShortcodesServiceProvider extends ServiceProvider {
 
     /**
      * Register the service provider.
-     * 
-     * @return void
      */
-    public function register() {
+    public function register()
+    {
         $this->registerShortcode();
         $this->registerView();
     }
@@ -20,7 +19,8 @@ class ShortcodesServiceProvider extends ServiceProvider {
     /**
      * Register the Shortcode
      */
-    public function registerShortcode() {
+    public function registerShortcode()
+    {
         $this->app->singleton('shortcode', function($app) {
             return new Shortcode();
         });
@@ -29,13 +29,15 @@ class ShortcodesServiceProvider extends ServiceProvider {
     /**
      * Register the View
      */
-    public function registerView() {
+    public function registerView()
+    {
         $this->app->singleton('view', function($app) {
             $resolver = $app['view.engine.resolver'];
             $finder = $app['view.finder'];
             $env = new Factory($resolver, $finder, $app['events'], $app['shortcode']);
             $env->setContainer($app);
             $env->share('app', $app);
+
             return $env;
         });
     }
@@ -45,7 +47,8 @@ class ShortcodesServiceProvider extends ServiceProvider {
      *
      * @return array
      */
-    public function provides() {
+    public function provides()
+    {
         return array(
             'shortcode',
             'view'
