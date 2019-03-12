@@ -26,6 +26,7 @@ class Factory extends IlluminateViewFactory {
     public function __construct(EngineResolver $engines, ViewFinderInterface $finder, Dispatcher $events, Shortcode $shortcode)
     {
         parent::__construct($engines, $finder, $events);
+
         $this->shortcode = $shortcode;
     }
 
@@ -46,7 +47,9 @@ class Factory extends IlluminateViewFactory {
         $view = $this->normalizeName($view);
         $path = $this->finder->find($view);
         $data = array_merge($mergeData, $this->parseData($data));
+
         $this->callCreator($view = new View($this, $this->getEngineFromPath($path), $view, $path, $data, $this->shortcode));
+
         return $view;
     }
 

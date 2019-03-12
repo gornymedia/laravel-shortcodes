@@ -23,9 +23,10 @@ class View extends IlluminateView {
      * @param array $data
      * @param Shortcode $shortcode
      */
-    public function __construct(Factory $factory, EngineInterface $engine, $view, $path, $data = array(), Shortcode $shortcode)
+    public function __construct(Factory $factory, EngineInterface $engine, $view, $path, $data = [], Shortcode $shortcode)
     {
         parent::__construct($factory, $engine, $view, $path, $data);
+
         $this->shortcode = $shortcode;
     }
 
@@ -62,12 +63,14 @@ class View extends IlluminateView {
     {
         $this->factory->incrementRender();
         $this->factory->callComposer($this);
+
         $contents       = $this->getContents();
 
-        if ($this->shortcode->mode === Shortcode::modeCompile)
+        if ($this->shortcode->mode === Shortcode::modeCompile) {
             $contents   = $this->shortcode->compile($contents);
-        elseif ($this->shortcode->mode === Shortcode::modeStrip)
+        } elseif ($this->shortcode->mode === Shortcode::modeStrip) {
             $contents   = $this->shortcode->strip($contents);
+        }
 
         $this->factory->decrementRender();
 

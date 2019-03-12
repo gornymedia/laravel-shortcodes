@@ -19,7 +19,7 @@ class Shortcode {
      *
      * @var array
      */
-    protected $tags     = array();
+    protected $tags     = [];
 
     /**
      * Add shortcode tag and their callaback.
@@ -32,6 +32,7 @@ class Shortcode {
     {
         if (!$this->exists($tag)) {
             $this->tags[$tag] = $callback;
+
             return true;
         }
 
@@ -73,7 +74,7 @@ class Shortcode {
 
         $pattern = $this->getRegex();
 
-        return preg_replace_callback("/$pattern/s", array($this, 'render'), $content);
+        return preg_replace_callback("/$pattern/s", [$this, 'render'], $content);
     }
 
     /**
@@ -88,8 +89,8 @@ class Shortcode {
             return substr($m[0], 1, -1);
         }
 
-        $tag = $m[2];
-        $attr = $this->parseAtts(html_entity_decode($m[3], ENT_QUOTES));
+        $tag    = $m[2];
+        $attr   = $this->parseAtts(html_entity_decode($m[3], ENT_QUOTES));
 
         if (isset($m[5])) {
             return $m[1] . call_user_func($this->tags[$tag], $attr, $m[5], $tag) . $m[6];
@@ -148,7 +149,7 @@ class Shortcode {
      */
     protected function parseAtts($text)
     {
-        $atts       = array();
+        $atts       = [];
         $pattern    = '/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)/';
         $text       = preg_replace("/[\x{00a0}\x{200b}]+/u", " ", $text);
 
@@ -182,7 +183,7 @@ class Shortcode {
     public static function atts($pairs, $atts)
     {
         $atts   = (array) $atts;
-        $out    = array();
+        $out    = [];
 
         foreach ($pairs as $name => $default) {
             if (array_key_exists($name, $atts)) {
@@ -209,7 +210,7 @@ class Shortcode {
 
         $pattern = $this->getRegex();
 
-        return preg_replace_callback("/$pattern/s", array($this, 'stripTag'), $content);
+        return preg_replace_callback("/$pattern/s", [$this, 'stripTag'], $content);
     }
 
     /**

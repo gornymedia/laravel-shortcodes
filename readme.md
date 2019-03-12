@@ -7,6 +7,7 @@ Laravel Shortcodes Package
 
  Laravel  | Shortcodes
 :---------|:----------
+ 5.8.x    | 1.3.x
  5.5.x    | 1.2.x
  5.4.x    | 1.1.x
  5.3.x    | 1.1.x
@@ -19,7 +20,7 @@ Laravel Shortcodes Package
 Require this package in your `composer.json` and update composer.
 
 ```
-"gornymedia/laravel-shortcodes": "^1.2",
+"gornymedia/laravel-shortcodes": "^1.3",
 ```
 
 Add the service provider to `config/app.php`
@@ -31,13 +32,7 @@ Gornymedia\Shortcodes\ShortcodesServiceProvider::class,
 Add the class alias to `config/app.php`
 
 ```php
-'Shortcode' => 'Gornymedia\Shortcodes\Facades\Shortcode',
-```
-
-# Demo
-
-```php
-[example foo="something"]
+'Shortcode' => Gornymedia\Shortcodes\Facades\Shortcode::class,
 ```
 
 # Usage
@@ -47,42 +42,47 @@ Add the class alias to `config/app.php`
 Inside a service provider you can create the shortcodes with attributes.
 
 ```php
+use Gornymedia\Shortcodes\Facades\Shortcode;
+
 Shortcode::add('example', function($atts, $content, $name)
 {
-  $a = Shortcode::atts(array(
+  $a = Shortcode::atts([
+    'name' => $name,
     'foo' => 'something',
-    'bar' => 'something else',
-    ),
-    $atts
-  );
-    return "foo = {$a['foo']}";
+    ], $atts);
+    
+  return "foo = {$a['foo']}";
 });
+
+Usage : [example foo="something else"]
 ```
+
 Include partial files in shortcode
 
 ```php
+use Gornymedia\Shortcodes\Facades\Shortcode;
 
 Shortcode::add('widget', function($atts, $content, $name) 
 {
- $a = Shortcode::atts(array(
+ $a = Shortcode::atts([
   'name' => $name,
   'foo' => 'something'
-  ), $atts);
+  ], $atts);
   
  $file = 'partials/' . $a['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
  
- if ( view()->exists($file) ) {
+ if (view()->exists($file)) {
   return view($file, $a);
  }
 });
 
 Usage : [widget name="maps"]
-
 ```
 
 Compile shortcodes inside shortcode content
 
 ```php
+use Gornymedia\Shortcodes\Facades\Shortcode;
 
 Shortcode::add('strong', function($atts, $content, $name) {
  $content = Shortcode::compile($content);
