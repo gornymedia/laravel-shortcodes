@@ -117,3 +117,5 @@ return view('view')->stripShortcodes();
 This package is open-source software licensed under MIT License.
 
 This package uses WordPress shortcodes methods. The license under which the WordPress software is released is the GPLv2 (or later).
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=S4RCAGKGXMK4U&source=url)
