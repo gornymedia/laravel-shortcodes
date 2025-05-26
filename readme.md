@@ -7,6 +7,11 @@ Laravel Shortcodes Package
 
  Laravel  | Shortcodes
 :---------|:----------
+ 10.x     | 1.4
+ 9.x      | 1.4
+ 8.x      | 1.4
+ 7.x      | 1.4
+ 6.x      | 1.4
  5.8.x    | 1.3.x
  5.5.x    | 1.2.x
  5.4.x    | 1.1.x
@@ -17,10 +22,10 @@ Laravel Shortcodes Package
 
 # Installation
 
-Require this package in your `composer.json` and update composer.
+Require this package with Composer
 
-```
-"gornymedia/laravel-shortcodes": "^1.3",
+```shell
+composer require gornymedia/laravel-shortcodes 1.4
 ```
 
 Add the service provider to `config/app.php`
@@ -64,16 +69,16 @@ use Gornymedia\Shortcodes\Facades\Shortcode;
 
 Shortcode::add('widget', function($atts, $content, $name) 
 {
- $a = Shortcode::atts([
-  'name' => $name,
-  'foo' => 'something'
+  $a = Shortcode::atts([
+    'name' => $name,
+    'foo' => 'something'
   ], $atts);
   
- $file = 'partials/' . $a['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
+  $file = 'partials/' . $a['name'] ; // ex: resource/views/partials/ $atts['name'] .blade.php
  
- if (view()->exists($file)) {
-  return view($file, $a);
- }
+  if (view()->exists($file)) {
+    return view($file, $a);
+  }
 });
 
 Usage : [widget name="maps"]

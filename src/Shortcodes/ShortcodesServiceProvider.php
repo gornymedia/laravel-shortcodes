@@ -8,12 +8,25 @@ use Gornymedia\Shortcodes\Illuminate\View\Factory;
 class ShortcodesServiceProvider extends ServiceProvider {
 
     /**
-     * Register the service provider.
+     * Register the service provider
      */
     public function register()
     {
         $this->registerShortcode();
-        $this->registerView();
+        $this->registerView();    
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/gornymedia-laravel-shortcodes.php',
+            'gornmymedia-laravel-shortcodes'
+        );
+    }
+    /**
+     * Boot methods
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '/../../config/gornymedia-laravel-shortcodes.php' => config_path('gornymedia-laravel-shortcodes.php'),
+        ]);
     }
 
     /**

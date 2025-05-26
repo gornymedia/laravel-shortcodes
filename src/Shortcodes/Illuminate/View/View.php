@@ -64,12 +64,20 @@ class View extends IlluminateView {
         $this->factory->incrementRender();
         $this->factory->callComposer($this);
 
-        $contents       = $this->getContents();
+        $contents = $this->getContents();
 
         if ($this->shortcode->mode === Shortcode::modeCompile) {
-            $contents   = $this->shortcode->compile($contents);
+            $contents = $this->shortcode->compile($contents);
         } elseif ($this->shortcode->mode === Shortcode::modeStrip) {
-            $contents   = $this->shortcode->strip($contents);
+            $contents = $this->shortcode->strip($contents);
+        } else {
+            $mode = config('gornymedia-laravel-shortcodes.mode');
+
+            if (in_array($mode, ['compile','strip'])) {
+                $mode === 'compile' 
+                ? $contents = $this->shortcode->compile($contents) 
+                : $contents = $this->shortcode->strip($contents);
+            }
         }
 
         $this->factory->decrementRender();
