@@ -40,6 +40,12 @@ Add the class alias to `config/app.php`
 'Shortcode' => Gornymedia\Shortcodes\Facades\Shortcode::class,
 ```
 
+Copy the package config to your local config with the publish command
+
+```shell
+php artisan vendor:publish --provider="Gornymedia\Shortcodes\ShortcodesServiceProvider"
+```
+
 # Usage
 
 ## Creating shortcodes
