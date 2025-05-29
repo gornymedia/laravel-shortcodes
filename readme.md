@@ -27,7 +27,7 @@ Laravel Shortcodes Package
 Require this package with Composer
 
 ```shell
-composer require gornymedia/laravel-shortcodes 1.4
+composer require gornymedia/laravel-shortcodes 1.5
 ```
 
 Add the service provider to `bootstrap/providers.php`
